@@ -6,39 +6,37 @@ public class Demo {
 
 	public static void main(String[] args) {
 
-		int dimension = 3; 
-		double left = 75;
-		double right = 50;
-		double top = 100;
-		double bottom = 0;
-
-		for (int loop = 0; loop < args.length; loop = loop + 2) {
-			switch (args[loop]) { 
+		// Default arguments
+		int dimension = 3;
+		float leftEdgeTemp = 75.0f;
+		float rightEdgeTemp = 50.0f;
+		float topEdgeTemp = 100.0f;
+		float bottomEdgeTemp = 0.0f;
+		
+		// Parse command line arguments
+		for (int i = 0; i < args.length; i++) {
+			switch (args[i]) { 
 			case "-d":	
-				dimension = Integer.parseInt(args[loop + 1]);
+				dimension = Integer.parseInt(args[i + 1]);
 				break;
 			case "-l":
-				left = Integer.parseInt(args[loop + 1]);
+				leftEdgeTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-r":
-				right = Integer.parseInt(args[loop + 1]);
+				rightEdgeTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-t":
-				top = Integer.parseInt(args[loop + 1]);
+				topEdgeTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-b":
-				bottom = Integer.parseInt(args[loop + 1]);
+				bottomEdgeTemp = Float.parseFloat(args[i + 1]);
 				break;
 			default:
-				System.out.println("Bad param");
+				System.out.println("Inoperable parameter.");
 			}
 		}	
 		
-		System.out.println("-d: " + dimension + " -t: " + top + " -b: " + bottom + " -l: " + left + " -r: " + right);
-		System.out.println("");
-		
-		Plate hotplate = new Plate(dimension, top, bottom, left, right);
+		Plate hotplate = new Plate(dimension, topEdgeTemp, bottomEdgeTemp, leftEdgeTemp, rightEdgeTemp);
 		hotplate.diffuse();
-
 	}
 }

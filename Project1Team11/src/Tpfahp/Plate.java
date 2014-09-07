@@ -3,21 +3,21 @@ package Tpfahp;
 public class Plate {
 	private double tempThreshold = .0001;
 	private int dimension;
-	private double topTemp;
-	private double bottomTemp;
-	private double leftTemp;
-	private double rightTemp;
-    private double[][] oldmatrix;
-    private double[][] newmatrix;
+	private float topTemp;
+	private float bottomTemp;
+	private float leftTemp;
+	private float rightTemp;
+    private float[][] oldmatrix;
+    private float[][] newmatrix;
 
-	public Plate(int dim, double top, double bottom, double left, double right) {
+	public Plate(int dim, float top, float bottom, float left, float right) {
 		dimension = dim;
 		topTemp = top;
 		bottomTemp = bottom;
 		leftTemp = left;
 		rightTemp = right;
-	 	oldmatrix = new double[dimension + 2][dimension + 2];
-	 	newmatrix = new double[dimension + 2][dimension + 2];
+	 	oldmatrix = new float[dimension + 2][dimension + 2];
+	 	newmatrix = new float[dimension + 2][dimension + 2];
 		
 		initializeMatrix();
 		
@@ -26,7 +26,7 @@ public class Plate {
 	private void printMatrix(int start, int end) {
 		for (int row = start; row < end; row++) {
 			for (int col = start; col < end; col++) {
-				String temp = String.valueOf(Math.round(oldmatrix[row][col]*100.0)/100.0);
+				String temp = String.valueOf(Math.round(oldmatrix[row][col]*100.0f)/100.0f);
 				if (oldmatrix[row][col] < 10) {
 					if (temp.length() < 4) {
 						System.out.print("  " + temp + "0 ");
@@ -97,7 +97,7 @@ public class Plate {
 			done = true;
 			for (int row = 1; row < dimension + 1; row++) {
 				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0;
+					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0f;
 					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
 						done = false;
 					}
