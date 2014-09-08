@@ -1,42 +1,42 @@
 package Tpfahp;
 
-import Tpdahp.Plate;
+import Tpfahp.Plate;
 
 public class Demo {
 
 	public static void main(String[] args) {
 
 		// Default arguments
-		int dimension = 3;
-		float leftEdgeTemp = 75.0f;
-		float rightEdgeTemp = 50.0f;
-		float topEdgeTemp = 100.0f;
-		float bottomEdgeTemp = 0.0f;
+		int dimension = 22;
+		float leftTemp = 22.0f;
+		float rightTemp = 44.0f;
+		float topTemp = 77.0f;
+		float bottomTemp = 33.0f;
 		
 		// Parse command line arguments
-		for (int i = 0; i < args.length; i++) {
+		for (int i = 0; i < args.length; i += 2) {
 			switch (args[i]) { 
 			case "-d":	
 				dimension = Integer.parseInt(args[i + 1]);
 				break;
 			case "-l":
-				leftEdgeTemp = Float.parseFloat(args[i + 1]);
+				leftTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-r":
-				rightEdgeTemp = Float.parseFloat(args[i + 1]);
+				rightTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-t":
-				topEdgeTemp = Float.parseFloat(args[i + 1]);
+				topTemp = Float.parseFloat(args[i + 1]);
 				break;
 			case "-b":
-				bottomEdgeTemp = Float.parseFloat(args[i + 1]);
+				bottomTemp = Float.parseFloat(args[i + 1]);
 				break;
 			default:
 				System.out.println("Inoperable parameter.");
 			}
 		}	
 		
-		Plate hotplate = new Plate(dimension, topEdgeTemp, bottomEdgeTemp, leftEdgeTemp, rightEdgeTemp);
-		hotplate.diffuse();
+		Plate hotplate = new Plate(dimension, topTemp, bottomTemp, leftTemp, rightTemp);
+		hotplate.diffuseHeat();
 	}
 }

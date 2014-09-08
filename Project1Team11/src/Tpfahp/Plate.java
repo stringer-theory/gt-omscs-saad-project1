@@ -1,115 +1,91 @@
 package Tpfahp;
 
+import Tpfahp.Printer;
+
 public class Plate {
-	private double tempThreshold = .0001;
+	private float tempChangeMin = .0001f;
 	private int dimension;
+	private int dimensionWithEdges;
 	private float topTemp;
 	private float bottomTemp;
 	private float leftTemp;
 	private float rightTemp;
-    private float[][] oldmatrix;
-    private float[][] newmatrix;
+    private float[][] oldMatrix;
+    private float[][] newMatrix;
 
-	public Plate(int dim, float top, float bottom, float left, float right) {
-		dimension = dim;
-		topTemp = top;
-		bottomTemp = bottom;
-		leftTemp = left;
-		rightTemp = right;
-	 	oldmatrix = new float[dimension + 2][dimension + 2];
-	 	newmatrix = new float[dimension + 2][dimension + 2];
+	public Plate(int dimension, float topTemp, float bottomTemp, float leftTemp, float rightTemp) {
+		this.dimension = dimension;
+		this.dimensionWithEdges = dimension + 2;
+		this.topTemp = topTemp;
+		this.bottomTemp = bottomTemp;
+		this.leftTemp = leftTemp;
+		this.rightTemp = rightTemp;
+	 	oldMatrix = new float[dimensionWithEdges][dimensionWithEdges];
+	 	newMatrix = new float[dimensionWithEdges][dimensionWithEdges];
 		
-		initializeMatrix();
-		
-	}
-
-	private void printMatrix(int start, int end) {
-		for (int row = start; row < end; row++) {
-			for (int col = start; col < end; col++) {
-				String temp = String.valueOf(Math.round(oldmatrix[row][col]*100.0f)/100.0f);
-				if (oldmatrix[row][col] < 10) {
-					if (temp.length() < 4) {
-						System.out.print("  " + temp + "0 ");
-					} else {							
-						System.out.print("  " + temp + " ");
-					}	
-				} else if (oldmatrix[row][col] >= 99.995) {
-					System.out.print(temp + "0 ");
-				} else {
-					if (temp.length() < 5) {
-						System.out.print(" " + temp + "0 ");
-					} else {
-						System.out.print(" " + temp + " ");
-					}
-				}
-			}
-			System.out.println("");
-		}
-		System.out.println("");
-	}
-
-	private void initializeMatrix() {
-		for (int row = 0; row < dimension + 2; row++) {
-			for (int col = 0; col < dimension + 2; col++) {
-				if (row == 0) {
-					oldmatrix[row][col] = topTemp;
-				} else if (col == 0) {
-					oldmatrix[row][col] = leftTemp;
-				} else if (row == dimension + 1) {
-					oldmatrix[row][col] = bottomTemp;
-				} else if (col == dimension + 1) {
-					oldmatrix[row][col] = rightTemp;
-				} else {
-					oldmatrix[row][col] = 0;
-				}
-			}
-		}
-		for (int row = 0; row < dimension + 2; row++) {
-			for (int col = 0; col < dimension + 2; col++) {
-				if (row == 0) {
-					newmatrix[row][col] = topTemp;
-				} else if (col == 0) {
-					newmatrix[row][col] = leftTemp;
-				} else if (row == dimension + 1) {
-					newmatrix[row][col] = rightTemp;
-				} else if (col == dimension + 1) {
-					newmatrix[row][col] = bottomTemp;
-				} else {
-					newmatrix[row][col] = 0;
-				}
-			}
-		}
-	}
-
-	private void swapMatrix() {
-		for (int row = 1; row < dimension+1; row++) {
-			for (int col = 1; col < dimension+1; col++) {
-				oldmatrix[row][col] = newmatrix[row][col];
-			}
-		}
+		initializeMatrices();
 	}
 	
-	public void diffuse() {
+	public void diffuseHeat() {
 		boolean done = false;
-		int iterations = 0;
 		
-		while (!done) {
+		while(!done) {
 			done = true;
-			for (int row = 1; row < dimension + 1; row++) {
-				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0f;
-					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
+			
+			// Compute new node temperatures
+			for (int row = 1; row <= dimension; row++) {
+				for (int col = 1; col <= dimension; col++) {
+					newMatrix[row][col] = computeNodeTemperature(row, col);
+					
+					// If delta of any single node is greater than or equal to
+					// temperature change minimum, carry on with diffusion
+					if(newMatrix[row][col] - oldMatrix[row][col] >= tempChangeMin) {
 						done = false;
 					}
 				}
 			}
-			if (!done) {
-				swapMatrix();
-				iterations = iterations + 1;
-			}
+			
+			this.oldMatrix = copyMatrix(newMatrix);
 		}
-		printMatrix(1, dimension + 1);
-		System.out.println("Number of iterations: " + iterations);
+		
+		// Output completed heat diffusion
+		Printer.printMatrix(newMatrix);
 	}
 	
+	private void initializeMatrices() {
+		// Initialize a first matrix w/ edge temperatures and 0's
+		for (int row = 0; row < dimensionWithEdges; row++) {
+			for (int col = 0; col < dimensionWithEdges; col++) {
+				if (row == 0) {
+					oldMatrix[row][col] = topTemp;
+				} else if (col == 0) {
+					oldMatrix[row][col] = leftTemp;
+				} else if (row == dimension + 1) {
+					oldMatrix[row][col] = bottomTemp;
+				} else if (col == dimension + 1) {
+					oldMatrix[row][col] = rightTemp;
+				} else {
+					oldMatrix[row][col] = 0.0f;
+				}
+			}
+		}
+		
+		// Duplicate the value-populated matrix
+		this.newMatrix = copyMatrix(oldMatrix);
+	}
+	
+	private float[][] copyMatrix(float[][] matrix) {
+		float[][] tmpMatrix = new float[dimensionWithEdges][dimensionWithEdges];
+		for (int row = 0; row < dimensionWithEdges; row++) {
+			for (int col = 0; col < dimensionWithEdges; col++) {
+				tmpMatrix[row][col] = matrix[row][col];
+			}
+		}
+		return tmpMatrix;
+	}
+	
+	private float computeNodeTemperature(int row, int col) {
+		return (oldMatrix[row + 1][col] + oldMatrix[row - 1][col] +
+				oldMatrix[row][col + 1] + oldMatrix[row][col - 1]) / 4.0f;
+	}
 }
