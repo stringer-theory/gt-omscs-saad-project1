@@ -16,13 +16,14 @@ public class Plate {
 		bottomTemp = bottom;
 		leftTemp = left;
 		rightTemp = right;
-	 	oldmatrix = new double[dimension + 2][dimension + 2];
+		oldmatrix = new double[dimension + 2][dimension + 2];
 	 	newmatrix = new double[dimension + 2][dimension + 2];
 		
 		initializeMatrix();
 		
 	}
-
+	
+	// display the matrix
 	private void printMatrix(int start, int end) {
 		for (int row = start; row < end; row++) {
 			for (int col = start; col < end; col++) {
@@ -48,22 +49,8 @@ public class Plate {
 		System.out.println("");
 	}
 
+	// initialize matrix to edge values and zero for all interior nodes
 	private void initializeMatrix() {
-		for (int row = 0; row < dimension + 2; row++) {
-			for (int col = 0; col < dimension + 2; col++) {
-				if (row == 0) {
-					oldmatrix[row][col] = topTemp;
-				} else if (col == 0) {
-					oldmatrix[row][col] = leftTemp;
-				} else if (row == dimension + 1) {
-					oldmatrix[row][col] = bottomTemp;
-				} else if (col == dimension + 1) {
-					oldmatrix[row][col] = rightTemp;
-				} else {
-					oldmatrix[row][col] = 0;
-				}
-			}
-		}
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
 				if (row == 0) {
@@ -71,24 +58,29 @@ public class Plate {
 				} else if (col == 0) {
 					newmatrix[row][col] = leftTemp;
 				} else if (row == dimension + 1) {
-					newmatrix[row][col] = rightTemp;
-				} else if (col == dimension + 1) {
 					newmatrix[row][col] = bottomTemp;
+				} else if (col == dimension + 1) {
+					newmatrix[row][col] = rightTemp;
 				} else {
 					newmatrix[row][col] = 0;
 				}
 			}
 		}
+		// initialize the old matrix by copying the new
+		swapMatrix();
+		
 	}
 
+	// overlay the values in the old matrix with the values in the new matrix
 	private void swapMatrix() {
-		for (int row = 1; row < dimension+1; row++) {
-			for (int col = 1; col < dimension+1; col++) {
+		for (int row = 0; row < dimension+2; row++) {
+			for (int col = 0; col < dimension+2; col++) {
 				oldmatrix[row][col] = newmatrix[row][col];
 			}
 		}
 	}
 	
+	// diffuse the edge temperatures throughout the matrix by averaging the 4 adjacent nodes
 	public void diffuse() {
 		boolean done = false;
 		int iterations = 0;
