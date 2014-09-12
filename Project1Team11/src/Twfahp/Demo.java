@@ -1,6 +1,6 @@
 package Twfahp;
 
-import Tpfahp.Plate;
+import Twfahp.Plate;
 
 public class Demo {
 	
