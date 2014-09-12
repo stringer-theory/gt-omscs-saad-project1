@@ -4,7 +4,6 @@ import common.*;
 
 public class Demo extends DemoBase implements DiffusionListener{
 
-
 	public static void main(String[] args) {
 		Demo demo = new Demo(args);
 		demo.run();			
@@ -28,11 +27,11 @@ public class Demo extends DemoBase implements DiffusionListener{
 		System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
 	}
 
-	public void iterationDone() {
-		// not implemented
+	public void iterationDone(int currIter) {
+		// System.out.println("i:"+currIter);
 	}
 	
-	public void diffusionDone(){
+	public void diffusionDone(int finalIter){
 		double[][] matrix = hotplate.getMatrix();
 		printMatrix(matrix);
 	}

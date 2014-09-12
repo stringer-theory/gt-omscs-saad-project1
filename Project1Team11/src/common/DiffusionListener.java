@@ -2,6 +2,6 @@
 package common;
 
 public interface DiffusionListener{
-	public void iterationDone();
-	public void diffusionDone();
+	public void iterationDone(int currIter);
+	public void diffusionDone(int finalIter);
 }

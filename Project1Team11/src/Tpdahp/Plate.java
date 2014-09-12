@@ -84,12 +84,13 @@ class Plate implements PlateInterface {
 					}
 				}
 			}
+			dl.iterationDone(iterations);
 			if (!done) {
 				swapMatrix();
 				iterations = iterations + 1;
 			}
 		}
-		dl.diffusionDone();
+		dl.diffusionDone(iterations);
 	}
 	public double[][] getMatrix(){
 		return newmatrix;
