@@ -1,9 +1,9 @@
-// Plate2.java
+// Plate.java
 package Tpdahp;
 
 import common.*;
 
-class Plate2 implements PlateInterface {
+class Plate implements PlateInterface {
 	//todo: get this from properties
 	private double tempThreshold = .0001;
 	private int maxIterations = 10000;
@@ -16,7 +16,7 @@ class Plate2 implements PlateInterface {
     private double[][] newmatrix;
     private DiffusionListener dl;
 
-	public Plate2(int dim, double top, double bottom, double left, double right) {
+	public Plate(int dim, double top, double bottom, double left, double right) {
 		dimension = dim;
 		topTemp = top;
 		bottomTemp = bottom;

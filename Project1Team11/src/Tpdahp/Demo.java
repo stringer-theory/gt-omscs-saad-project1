@@ -2,7 +2,7 @@ package Tpdahp;
 
 import common.*;
 
-public class Demo2 implements DiffusionListener{
+public class Demo implements DiffusionListener{
 
 	private int dimension = 0; 
 	private double left = 0;
@@ -13,11 +13,11 @@ public class Demo2 implements DiffusionListener{
 
 	public static void main(String[] args) {
 
-		Demo2 demo = new Demo2(args);
+		Demo demo = new Demo(args);
 		demo.run();			
 	}
 
-	public Demo2(String[] args){
+	public Demo(String[] args){
 		processArgs(args);		
 	}
 
