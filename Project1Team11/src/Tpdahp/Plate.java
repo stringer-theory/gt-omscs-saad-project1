@@ -1,7 +1,12 @@
+// Plate2.java
 package Tpdahp;
 
-public class Plate {
+import common.*;
+
+class Plate2 implements PlateInterface {
+	//todo: get this from properties
 	private double tempThreshold = .0001;
+	private int maxIterations = 10000;
 	private int dimension;
 	private double topTemp;
 	private double bottomTemp;
@@ -9,8 +14,9 @@ public class Plate {
 	private double rightTemp;
     private double[][] oldmatrix;
     private double[][] newmatrix;
+    private DiffusionListener dl;
 
-	public Plate(int dim, double top, double bottom, double left, double right) {
+	public Plate2(int dim, double top, double bottom, double left, double right) {
 		dimension = dim;
 		topTemp = top;
 		bottomTemp = bottom;
@@ -22,35 +28,9 @@ public class Plate {
 		initializeMatrix();
 		
 	}
-	
-	// display the matrix
-	private void printMatrix(int start, int end) {
-		for (int row = start; row < end; row++) {
-			for (int col = start; col < end; col++) {
-				String temp = String.valueOf(Math.round(oldmatrix[row][col]*100.0)/100.0);
-				if (oldmatrix[row][col] < 10) {
-					if (temp.length() < 4) {
-						System.out.print("  " + temp + "0 ");
-					} else {							
-						System.out.print("  " + temp + " ");
-					}	
-				} else if (oldmatrix[row][col] >= 99.995) {
-					System.out.print(temp + "0 ");
-				} else {
-					if (temp.length() < 5) {
-						System.out.print(" " + temp + "0 ");
-					} else {
-						System.out.print(" " + temp + " ");
-					}
-				}
-			}
-			System.out.println("");
-		}
-		System.out.println("");
-	}
 
 	// initialize matrix to edge values and zero for all interior nodes
-	private void initializeMatrix() {
+	public void initializeMatrix() {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
 				if (row == 0) {
@@ -67,8 +47,7 @@ public class Plate {
 			}
 		}
 		// initialize the old matrix by copying the new
-		swapMatrix();
-		
+		swapMatrix();	
 	}
 
 	// overlay the values in the old matrix with the values in the new matrix
@@ -80,7 +59,17 @@ public class Plate {
 		}
 	}
 	
-	// diffuse the edge temperatures throughout the matrix by averaging the 4 adjacent nodes
+
+	public void setTempThreshold(double threshold){
+		this.tempThreshold = threshold;
+	}
+	public void setMaxIterations(int maxIterations){
+		this.maxIterations = maxIterations;
+	}
+	public void setDiffusionListener(DiffusionListener dl){
+		this.dl = dl;
+	}
+
 	public void diffuse() {
 		boolean done = false;
 		int iterations = 0;
@@ -100,9 +89,9 @@ public class Plate {
 				iterations = iterations + 1;
 			}
 		}
-		printMatrix(1, dimension + 1);
-//		printMatrix(0, dimension + 2);
-		System.out.println("Number of iterations: " + iterations);
+		dl.diffusionDone();
 	}
-	
+	public double[][] getMatrix(){
+		return newmatrix;
+	}
 }

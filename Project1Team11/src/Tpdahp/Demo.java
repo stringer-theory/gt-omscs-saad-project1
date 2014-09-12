@@ -1,21 +1,64 @@
 package Tpdahp;
 
-import Tpdahp.Plate;
+import common.*;
 
-public class Demo {
+public class Demo2 implements DiffusionListener{
+
+	private int dimension = 0; 
+	private double left = 0;
+	private double right = 0;
+	private double top = 0;
+	private double bottom = 0;
+	private Plate2 hotplate;
 
 	public static void main(String[] args) {
 
-		int dimension = 0; 
-		double left = 0;
-		double right = 0;
-		double top = 0;
-		double bottom = 0;
+		Demo2 demo = new Demo2(args);
+		demo.run();			
+	}
+
+	public Demo2(String[] args){
+		processArgs(args);		
+	}
+
+	public void run(){
 		long startTime = 0;
 		long totalTime = 0;
+		hotplate = new Plate2(dimension, top, bottom, left, right);
+		hotplate.setDiffusionListener(this);
 		
+		startTime = System.currentTimeMillis();
+		hotplate.diffuse();
+		totalTime = System.currentTimeMillis() - startTime;
+		
+		System.out.println("Run Time " + totalTime + "ms");
+		System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
+
+	}
+
+	public void iterationDone() {
+		// not implemented
+	}
+	
+	public void diffusionDone(){
+		double[][] matrix = hotplate.getMatrix();
+		printMatrix(matrix);
+	}
+
+	public void printMatrix(double[][] matrix) {
+		System.out.println("");
+		for (int row = 1; row < matrix.length - 1; row++) {
+			for (int col = 1; col < matrix.length - 1; col++) {
+				System.out.printf("%-6s ", String.valueOf(Math.round(matrix[row][col] * 100.0f)/100.0f));
+			}
+			System.out.println("");
+		}
+		System.out.println("");
+	}
+
+	public void processArgs(String[] args){
 		// insure args are passed as pairs (flag and value)
-		if (args.length % 2 == 0) {
+		if (args.length>0 && args.length % 2 == 0) {
 			// parse each pair and assign value to appropriate variable
 			for (int loop = 0; loop < args.length; loop = loop + 2) {
 				switch (args[loop]) { 
@@ -61,26 +104,16 @@ public class Demo {
 					break;
 				// unknown flag	
 				default:
-					System.out.println("Invalid parameter specified");
+					usage();
 				}
 			}
-
-			System.out.println("Tpdahp -d: " + dimension + " -t: " + top + " -b: " + bottom + " -l: " + left + " -r: " + right);
-			System.out.println("");
-			
-			// get start time
-			startTime = System.currentTimeMillis();
-			Plate hotplate = new Plate(dimension, top, bottom, left, right);
-			hotplate.diffuse();
-			// compute elapsed time
-			totalTime = System.currentTimeMillis() - startTime;
-			
-			System.out.println("Run Time " + totalTime + "ms");
-			System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
-			
 		} else {
-			System.out.println("Incorrect number of parameters specified");
+			usage();
 		}
 	}
-	
+
+	private void usage(){
+		System.out.println("Usage: Tpdahp -d: <dimension> -t <top> -b: <bottom> -l <left> -r <right>");
+		System.exit(-1);
+	}
 }
