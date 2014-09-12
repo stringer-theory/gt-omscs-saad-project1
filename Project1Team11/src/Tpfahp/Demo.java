@@ -1,42 +1,38 @@
 package Tpfahp;
 
-import Tpfahp.Plate;
+import common.*;
 
-public class Demo {
+public class Demo extends DemoBase implements DiffusionListener{
 
 	public static void main(String[] args) {
+		Demo demo = new Demo(args);
+		demo.run();			
+	}
 
-		// Default arguments
-		int dimension = 22;
-		float leftTemp = 22.0f;
-		float rightTemp = 44.0f;
-		float topTemp = 77.0f;
-		float bottomTemp = 33.0f;
+	public Demo(String[] args){
+		processArgs(args);		
+	}
+
+	public void run(){
+		long startTime = 0;
+		long totalTime = 0;
+		hotplate = new Plate(dimension, (float)top, (float)bottom, (float)left, (float)right);
+		hotplate.setDiffusionListener(this);
 		
-		// Parse command line arguments
-		for (int i = 0; i < args.length; i += 2) {
-			switch (args[i]) { 
-			case "-d":	
-				dimension = Integer.parseInt(args[i + 1]);
-				break;
-			case "-l":
-				leftTemp = Float.parseFloat(args[i + 1]);
-				break;
-			case "-r":
-				rightTemp = Float.parseFloat(args[i + 1]);
-				break;
-			case "-t":
-				topTemp = Float.parseFloat(args[i + 1]);
-				break;
-			case "-b":
-				bottomTemp = Float.parseFloat(args[i + 1]);
-				break;
-			default:
-				System.out.println("Inoperable parameter.");
-			}
-		}	
+		startTime = System.currentTimeMillis();
+		hotplate.diffuse();
+		totalTime = System.currentTimeMillis() - startTime;
 		
-		Plate hotplate = new Plate(dimension, topTemp, bottomTemp, leftTemp, rightTemp);
-		hotplate.diffuseHeat();
+		System.out.println("Run Time " + totalTime + "ms");
+		System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
+	}
+
+	public void iterationDone(int currIter) {
+		// System.out.println("i:"+currIter);
+	}
+	
+	public void diffusionDone(int finalIter){
+		double[][] matrix = hotplate.getMatrix();
+		printMatrix(matrix);
 	}
 }
