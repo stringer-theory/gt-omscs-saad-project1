@@ -1,46 +1,38 @@
 package Twfahp;
 
-import Twfahp.Plate;
+import common.*;
 
-public class Demo {
-	
-			public static void main(String[] args) {
+public class Demo extends DemoBase implements DiffusionListener{
 
-			// Default arguments
-			int dimension = 22;
-			float leftTemp = 22.0f;
-			Float floatObject1 = leftTemp;
-			float rightTemp = 44.0f;
-			Float floatObject2 = rightTemp;
-			float topTemp = 77.0f;
-			Float floatObject3 = topTemp;
-			float bottomTemp = 33.0f;
-			Float floatObject4 = bottomTemp;
-			
-			// Parse command line arguments
-			for (int i = 0; i < args.length; i += 2) {
-				switch (args[i]) { 
-				case "-d":	
-					dimension = Integer.parseInt(args[i + 1]);
-					break;
-				case "-l":
-					floatObject1 = Float.parseFloat(args[i + 1]);
-					break;
-				case "-r":
-					floatObject2 = Float.parseFloat(args[i + 1]);
-					break;
-				case "-t":
-					floatObject3 = Float.parseFloat(args[i + 1]);
-					break;
-				case "-b":
-					floatObject4 = Float.parseFloat(args[i + 1]);
-					break;
-				default:
-					System.out.println("Inoperable parameter.");
-				}
-			}	
-			
-			Plate hotplate = new Plate(dimension, floatObject3, floatObject4, floatObject1, floatObject2);
-			hotplate.diffuseHeat();
-		}
+	public static void main(String[] args) {
+		Demo demo = new Demo(args);
+		demo.run();			
 	}
+
+	public Demo(String[] args){
+		processArgs(args);		
+	}
+
+	public void run(){
+		long startTime = 0;
+		long totalTime = 0;
+		hotplate = new Plate(dimension, (Float)top, (Float)bottom, (Float)left, (Float)right);
+		hotplate.setDiffusionListener(this);
+		
+		startTime = System.currentTimeMillis();
+		hotplate.diffuse();
+		totalTime = System.currentTimeMillis() - startTime;
+		
+		System.out.println("Run Time " + totalTime + "ms");
+		System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
+	}
+
+	public void iterationDone(int currIter) {
+		// System.out.println("i:"+currIter);
+	}
+	
+	public void diffusionDone(int finalIter){
+		double[][] matrix = hotplate.getMatrix();
+		printMatrix(matrix);
+	}
+}
