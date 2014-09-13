@@ -59,13 +59,14 @@ class Plate implements PlateInterface {
 		}
 	}
 	
-
 	public void setTempThreshold(double threshold){
 		this.tempThreshold = threshold;
 	}
+	
 	public void setMaxIterations(int maxIterations){
 		this.maxIterations = maxIterations;
 	}
+	
 	public void setDiffusionListener(DiffusionListener dl){
 		this.dl = dl;
 	}
@@ -88,11 +89,14 @@ class Plate implements PlateInterface {
 			if (!done) {
 				swapMatrix();
 				iterations = iterations + 1;
+				if (iterations >= maxIterations) {
+					done = true;
+				}
 			}
 		}
 		dl.diffusionDone(iterations);
 	}
 	public double[][] getMatrix(){
-		return newmatrix;
+		return oldmatrix;
 	}
 }
