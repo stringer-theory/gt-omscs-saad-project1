@@ -12,8 +12,8 @@ class Plate implements PlateInterface {
 	private float bottomTemp;
 	private float leftTemp;
 	private float rightTemp;
-    private float[][] oldmatrix;
-    private float[][] newmatrix;
+    private float[][] oldMatrix;
+    private float[][] newMatrix;
     private DiffusionListener dl;
 
 	public Plate(int dim, float top, float bottom, float left, float right) {
@@ -22,8 +22,8 @@ class Plate implements PlateInterface {
 		bottomTemp = bottom;
 		leftTemp = left;
 		rightTemp = right;
-		oldmatrix = new float[dimension + 2][dimension + 2];
-	 	newmatrix = new float[dimension + 2][dimension + 2];
+		oldMatrix = new float[dimension + 2][dimension + 2];
+	 	newMatrix = new float[dimension + 2][dimension + 2];
 		
 		initializeMatrix();
 	}
@@ -33,15 +33,15 @@ class Plate implements PlateInterface {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
 				if (row == 0) {
-					newmatrix[row][col] = topTemp;
+					newMatrix[row][col] = topTemp;
 				} else if (col == 0) {
-					newmatrix[row][col] = leftTemp;
+					newMatrix[row][col] = leftTemp;
 				} else if (row == dimension + 1) {
-					newmatrix[row][col] = bottomTemp;
+					newMatrix[row][col] = bottomTemp;
 				} else if (col == dimension + 1) {
-					newmatrix[row][col] = rightTemp;
+					newMatrix[row][col] = rightTemp;
 				} else {
-					newmatrix[row][col] = 0;
+					newMatrix[row][col] = 0;
 				}
 			}
 		}
@@ -69,8 +69,8 @@ class Plate implements PlateInterface {
 			done = true;
 			for (int row = 1; row < dimension + 1; row++) {
 				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0f;
-					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
+					newMatrix[row][col] = (oldMatrix[row + 1][col] + oldMatrix[row - 1][col] + oldMatrix[row][col + 1] + oldMatrix[row][col - 1]) / 4.0f;
+					if (Math.abs(newMatrix[row][col] - oldMatrix[row][col]) >= tempThreshold) {
 						done = false;
 					}
 				}
@@ -86,13 +86,13 @@ class Plate implements PlateInterface {
 	
 	public double[][] getMatrix(){
 		// Convert matrix (after computations) to adhere to interface
-		return convertMatrix(newmatrix);
+		return convertMatrix(newMatrix);
 	}
 	
 	private void swapMatrix() {
 		for (int row = 0; row < dimension+2; row++) {
 			for (int col = 0; col < dimension+2; col++) {
-				oldmatrix[row][col] = newmatrix[row][col];
+				oldMatrix[row][col] = newMatrix[row][col];
 			}
 		}
 	}
