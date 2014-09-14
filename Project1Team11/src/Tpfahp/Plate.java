@@ -12,8 +12,8 @@ class Plate implements PlateInterface {
 	private float bottomTemp;
 	private float leftTemp;
 	private float rightTemp;
-    private double[][] oldmatrix;
-    private double[][] newmatrix;
+    private float[][] oldmatrix;
+    private float[][] newmatrix;
     private DiffusionListener dl;
 
 	public Plate(int dim, float top, float bottom, float left, float right) {
@@ -22,8 +22,8 @@ class Plate implements PlateInterface {
 		bottomTemp = bottom;
 		leftTemp = left;
 		rightTemp = right;
-		oldmatrix = new double[dimension + 2][dimension + 2];
-	 	newmatrix = new double[dimension + 2][dimension + 2];
+		oldmatrix = new float[dimension + 2][dimension + 2];
+	 	newmatrix = new float[dimension + 2][dimension + 2];
 		
 		initializeMatrix();
 	}
@@ -48,15 +48,6 @@ class Plate implements PlateInterface {
 		// initialize the old matrix by copying the new
 		swapMatrix();	
 	}
-
-	// overlay the values in the old matrix with the values in the new matrix
-	private void swapMatrix() {
-		for (int row = 0; row < dimension+2; row++) {
-			for (int col = 0; col < dimension+2; col++) {
-				oldmatrix[row][col] = newmatrix[row][col];
-			}
-		}
-	}
 	
 	public void setTempThreshold(double threshold){
 		this.tempThreshold = threshold;
@@ -78,7 +69,7 @@ class Plate implements PlateInterface {
 			done = true;
 			for (int row = 1; row < dimension + 1; row++) {
 				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0;
+					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0f;
 					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
 						done = false;
 					}
@@ -94,6 +85,30 @@ class Plate implements PlateInterface {
 	}
 	
 	public double[][] getMatrix(){
-		return newmatrix;
+		// Convert matrix (after computations) to adhere to interface
+		return convertMatrix(newmatrix);
+	}
+	
+	private void swapMatrix() {
+		for (int row = 0; row < dimension+2; row++) {
+			for (int col = 0; col < dimension+2; col++) {
+				oldmatrix[row][col] = newmatrix[row][col];
+			}
+		}
+	}
+	
+	// Convert float matrix to double matrix
+	private double[][] convertMatrix(float[][] matrix) {
+		int l = matrix.length;
+		double[][] convertedMatrix = new double[l][l];
+		
+		for (int row = 0; row < l; row++) {
+			for (int col = 0; col < l; col++) {
+				double converted = matrix[row][col];
+				convertedMatrix[row][col] = converted;
+			}
+		}
+		
+		return convertedMatrix;
 	}
 }
