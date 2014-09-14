@@ -41,6 +41,7 @@ public class Demo extends DemoBase implements DiffusionListener {
 		System.out.println("Beginning Memory " + beginningUsedMemory/1024 + " kilobytes");
 		System.out.println("Ending Memory " + endingUsedMemory/1024 + " kilobytes");
 		System.out.println("Used Memory " + deltaUsedMemory/1024 + " kilobytes");
+		System.out.println("Number of Iterations " + ((Plate) this.hotplate).getIterations());
 	}
 
 	public void iterationDone(int currIter) {
