@@ -16,7 +16,7 @@ public class Demo extends DemoBase implements DiffusionListener{
 	public void run(){
 		long startTime = 0;
 		long totalTime = 0;
-		hotplate = new Plate(dimension, (Float)top, (Float)bottom, (Float)left, (Float)right);
+		hotplate = new Plate((int) dimension, (float) top, (float) bottom, (float) left, (float) right);
 		hotplate.setDiffusionListener(this);
 		
 		startTime = System.currentTimeMillis();

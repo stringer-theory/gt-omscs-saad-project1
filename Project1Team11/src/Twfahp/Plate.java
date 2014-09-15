@@ -12,18 +12,18 @@ class Plate implements PlateInterface {
 	private Float bottomTemp;
 	private Float leftTemp;
 	private Float rightTemp;
-    private double[][] oldmatrix;
-    private double[][] newmatrix;
+    private Float[][] oldmatrix;
+    private Float[][] newmatrix;
     private DiffusionListener dl;
 
-	public Plate(int dim, Float top, Float bottom, Float left, Float right) {
+	public Plate(int dim, float top, float bottom, float left, float right) {
 		dimension = dim;
 		topTemp = top;
 		bottomTemp = bottom;
 		leftTemp = left;
 		rightTemp = right;
-		oldmatrix = new double[dimension + 2][dimension + 2];
-	 	newmatrix = new double[dimension + 2][dimension + 2];
+		oldmatrix = new Float[dimension + 2][dimension + 2];
+	 	newmatrix = new Float[dimension + 2][dimension + 2];
 		
 		initializeMatrix();
 	}
@@ -33,15 +33,15 @@ class Plate implements PlateInterface {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
 				if (row == 0) {
-					newmatrix[row][col] = topTemp;
+					newmatrix[row][col] = new Float (topTemp);
 				} else if (col == 0) {
-					newmatrix[row][col] = leftTemp;
+					newmatrix[row][col] = new Float (leftTemp);
 				} else if (row == dimension + 1) {
-					newmatrix[row][col] = bottomTemp;
+					newmatrix[row][col] = new Float (bottomTemp);
 				} else if (col == dimension + 1) {
-					newmatrix[row][col] = rightTemp;
+					newmatrix[row][col] =new Float (rightTemp);
 				} else {
-					newmatrix[row][col] = 0;
+					newmatrix[row][col] = new Float (0);
 				}
 			}
 		}
@@ -78,7 +78,7 @@ class Plate implements PlateInterface {
 			done = true;
 			for (int row = 1; row < dimension + 1; row++) {
 				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = (oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0;
+					newmatrix[row][col] = new Float ((oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0);
 					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
 						done = false;
 					}
@@ -92,8 +92,23 @@ class Plate implements PlateInterface {
 		}
 		dl.diffusionDone(iterations);
 	}
-	
 	public double[][] getMatrix(){
-		return newmatrix;
+		// Convert matrix (after computations) to adhere to interface
+		return convertMatrix(newmatrix);
 	}
+	// Convert float matrix to double matrix
+	private double[][] convertMatrix(Float[][] newmatrix2) {
+		int l = newmatrix2.length;
+		double[][] convertedMatrix = new double[l][l];
+		
+		for (int row = 0; row < l; row++) {
+			for (int col = 0; col < l; col++) {
+				double converted = newmatrix2[row][col];
+				convertedMatrix[row][col] = converted;
+			}
+		}
+		
+		return convertedMatrix;
+	}
+		
 }
