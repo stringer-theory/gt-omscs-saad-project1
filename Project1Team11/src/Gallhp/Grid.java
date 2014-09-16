@@ -20,7 +20,7 @@ public class Grid extends JPanel {
 
     private double[][] matrix;
     public Grid(double[][] matrix){
-        System.out.println("new Grid created");
+        // System.out.println("new Grid created");
         this.matrix = matrix;
         
         ulhcX = BORDER_SIZE;
