@@ -3,7 +3,7 @@ package Twfahp;
 
 import common.*;
 
-class Plate implements PlateInterface {
+public class Plate implements PlateInterface {
 
 	private double tempThreshold = .0001;
 	private int maxIterations = 10000;
