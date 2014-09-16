@@ -18,27 +18,22 @@ import java.lang.Math;
  */
 public class Grid extends JPanel {
 
-    public Grid(){
-        this(BORDER_SIZE, BORDER_SIZE, WINDOW_SIZE, WINDOW_SIZE);
+    private double[][] matrix;
+    public Grid(double[][] matrix){
+        System.out.println("new Grid created");
+        this.matrix = matrix;
+        
+        ulhcX = BORDER_SIZE;
+        ulhcY = BORDER_SIZE;
+        width = WINDOW_SIZE;
+        height = WINDOW_SIZE;
+        
+        NUMBER_OF_ROWS = matrix[0].length;
+        NUMBER_OF_COLUMNS = matrix.length;
+        CELL_HEIGHT = GRID_SIZE / NUMBER_OF_COLUMNS;
+        CELL_WIDTH = GRID_SIZE / NUMBER_OF_ROWS;
     }
-    /**
-     * Creates a DrawnGrid, which is a displayable rectangle.  
-     * All units are in pixels.
-     *
-     * @param x X coordinate of the upper left hand corner of the
-     *                 rectangle within the containing widget
-     * @param y Y coordinate of the upper left hand corner of the
-     *                 rectangle within the containing widget
-     * @param w width of the rectangle
-     * @param h height of the rectangle
-     */
-    public Grid(int x, int y, int w, int h) {
-        ulhcX = x;
-        ulhcY = y;
-        width = w;
-        height = h;
-    }
-
+ 
     /**
      * Informs Swing of how much space is needed for drawing.
      * 
@@ -67,7 +62,8 @@ public class Grid extends JPanel {
         aGraphics.fillRect(colPos, rowPos, CELL_WIDTH, CELL_HEIGHT);
         
         // Color in RGB format with green and blue values = 0.0
-        aGraphics.setColor(new Color((float) Math.random(), 0.f, 0.f));    
+        // System.out.println(t + "," + (t / 100));
+        aGraphics.setColor(new Color((float) (t / 100), 0.f, 0.f));    
         aGraphics.fillRect(colPos, rowPos, CELL_WIDTH, CELL_HEIGHT);
     }
 
@@ -86,30 +82,11 @@ public class Grid extends JPanel {
 
         for (int i = 0; i < NUMBER_OF_ROWS; i++)
             for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
-                // Instead of calling random, here is where you
-                //   would insert the call that would provide
-                //   the temperature of the corresponding cell
-                //   on the heated plate.
-                paintSpot(anotherGraphics, i, j, Math.random());
+                paintSpot(anotherGraphics, i, j, matrix[i][j]);
         
         aGraphics.drawImage(bi, 0, 0, this);
    }
-    
-    /**
-     * Calling routine for DrawnGrid demo
-     * @param args unused
-     */
-    public static void main(String[] args) {
-        JFrame jf = new JFrame();
-        jf.setTitle("Java Drawing Demo");
-
-        jf.add(new Grid());
-
-        jf.pack();   
-        jf.setVisible(true);        
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-    
+        
     /**
      * Size of the containing window in pixels
      */
@@ -128,22 +105,22 @@ public class Grid extends JPanel {
     /**
      * Number of rows of cells in the DrawnGrid 
      */
-    private static final int NUMBER_OF_ROWS = 6;
+    private int NUMBER_OF_ROWS;
     
     /**
      * Number of cells in a row 
      */
-    private static final int NUMBER_OF_COLUMNS = 6;
+    private int NUMBER_OF_COLUMNS;
     
     /**
      * The height of a cell in pixels 
      */
-    private static final int CELL_HEIGHT = GRID_SIZE / NUMBER_OF_COLUMNS;
+    private int CELL_HEIGHT;
 
     /**
      * The width of a cell in pixels
      */
-    private static final int CELL_WIDTH = GRID_SIZE / NUMBER_OF_ROWS;
+    private int CELL_WIDTH;
 
     /**
      * X-coordinate of the upper left hand corner of the rectangle

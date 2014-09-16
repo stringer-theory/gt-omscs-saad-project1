@@ -3,7 +3,7 @@ package Tpdahp;
 
 import common.*;
 
-class Plate implements PlateInterface {
+public class Plate implements PlateInterface {
 	//todo: get this from properties
 	private double tempThreshold = .0001;
 	private int maxIterations = 10000;

@@ -14,7 +14,7 @@ import Tpdahp.*;
 // import Tpfahp.*;
 // import Twfahp.*;
 
-public class Demo extends JFrame implements ActionListener {
+public class Demo extends JFrame implements ActionListener, DiffusionListener {
     public static void main(String[] args) {
         
         SwingUtilities.invokeLater(new Runnable() {
@@ -46,6 +46,8 @@ public class Demo extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
+	private JPanel contents;
+
 	private JPanel contentsPanel(){
        // setup primary window contents panel
 		JPanel contents = new JPanel(new BorderLayout());
@@ -53,9 +55,10 @@ public class Demo extends JFrame implements ActionListener {
 		contents.setAlignmentY(Component.TOP_ALIGNMENT);
 	
 		contents.add(inputsPanel(),BorderLayout.WEST);
-		contents.add(visualization(),BorderLayout.CENTER);
+		// contents.add(visualization(),BorderLayout.CENTER);
 		// contents.add(runControls(),BorderLayout.SOUTH);
 
+		this.contents = contents;
 		return contents;
 	}
 
@@ -64,7 +67,7 @@ public class Demo extends JFrame implements ActionListener {
 		inputsPanel.setLayout(new BoxLayout(inputsPanel,BoxLayout.PAGE_AXIS));
 		// inputsPanel.setLayout(new FlowLayout());
 		inputsPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-		inputsPanel.setBorder(BorderFactory.createLineBorder(Color.red));
+		// inputsPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 		// inputsPanel.setPreferredSize(new Dimension(300,200));
 
 		inputsPanel.add(prompt("Choose a simulation..."));
@@ -75,7 +78,7 @@ public class Demo extends JFrame implements ActionListener {
 		return inputsPanel;
 	}
 
-	private Grid visualization(){ return new Grid();}
+	// private Grid visualization(){ return new Grid();}
 
 	private JPanel runControls(){
 		JPanel ctrlsPanel = new JPanel(new FlowLayout());
@@ -88,9 +91,12 @@ public class Demo extends JFrame implements ActionListener {
 		return ctrlsPanel;
 	}
 
+	private JComboBox<String> simulationCombo;
+
 	private JComboBox<String> simulationCombo(){
 		String[] options = {"Tpdahp","Tpfahp","Twfahp","4"};
-		JComboBox<String> simulationCombo = new JComboBox<String>(options);
+		simulationCombo = new JComboBox<String>(options);
+		simulationCombo.setActionCommand("simulation");
 		simulationCombo.addActionListener(this);
 
 		return simulationCombo;
@@ -104,6 +110,7 @@ public class Demo extends JFrame implements ActionListener {
 		// settingsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// settingsPanel.add(prompt("Set initial conditions"));
+		settingsPanel.add(inputField("Dimension"));
 		settingsPanel.add(inputField("Top"));
 		settingsPanel.add(inputField("Bot"));
 		settingsPanel.add(inputField("Left"));
@@ -123,6 +130,8 @@ public class Demo extends JFrame implements ActionListener {
 		return label;
 	}
 
+	private HashMap<String,JTextField> inputs = new HashMap<>();
+
 	private JPanel inputField(String name){
 		JPanel inputPanel = new JPanel();
 		// inputPanel.setBorder(BorderFactory.createTitledBorder("blah"));
@@ -140,6 +149,7 @@ public class Demo extends JFrame implements ActionListener {
 		l.setLabelFor(t);
 		inputPanel.add(t);
 
+		inputs.put(name,t);
 		return inputPanel;
 	}
 
@@ -153,6 +163,69 @@ public class Demo extends JFrame implements ActionListener {
 	private	void addEventHandlers(){}
 
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getActionCommand());
+		String cmd = e.getActionCommand();
+		if("simulation".equals(cmd)){
+	        return;
+		}
+		if("Run".equals(cmd)){
+	        run(simulationCombo.getSelectedIndex());
+	        return;
+		}
 	}
+
+	private int dimension = 0; 
+	private double left = 0;
+	private double right = 0;
+	private double top = 0;
+	private double bottom = 0;
+	private PlateInterface hotplate;
+
+	private void run(int i){
+		// long startTime = 0;
+		// long totalTime = 0;
+
+		System.out.println(inputs.get("Dimension"));
+		dimension = Integer.parseInt(inputs.get("Dimension").getText());
+		top = Double.parseDouble(inputs.get("Top").getText());
+		bottom = Double.parseDouble(inputs.get("Bot").getText());
+		left = Double.parseDouble(inputs.get("Left").getText());
+		right = Double.parseDouble(inputs.get("Right").getText());
+
+		System.out.println(dimension + "," + top + "," + bottom  + "," + left  + "," + right);
+		
+		switch(i){
+			case 0: hotplate = new Tpdahp.Plate(dimension, top, bottom, left, right);
+		}
+
+		System.out.println(hotplate);		
+		hotplate.setDiffusionListener(this);
+		
+		// startTime = System.currentTimeMillis();
+		hotplate.diffuse();
+		// totalTime = System.currentTimeMillis() - startTime;
+		
+		// System.out.println("Run Time " + totalTime + "ms");
+		// System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
+	}
+
+	private Grid viz;
+
+	public void iterationDone(int currIter) {
+		// System.out.println("i:"+currIter);
+	}
+	
+	public void diffusionDone(int finalIter){
+		System.out.println("diffusionDone:start");
+		double[][] matrix = hotplate.getMatrix();
+		if(viz != null){
+			contents.remove(viz);
+		}
+		viz = new Grid(matrix);
+		contents.add(viz);
+		validate();
+		repaint();
+		System.out.println("diffusionDone:finish");
+	}
+
+
 }
