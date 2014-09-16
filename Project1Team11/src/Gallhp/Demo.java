@@ -204,10 +204,9 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 			case 2: hotplate = new Twfahp.Plate(dimension, (float)top, (float)bottom, (float)left, (float)right); break;
 			case 3: hotplate = new Tpdohp.Plate(dimension, top, bottom, left, right); break;
 		}
-
 		// System.out.println(hotplate);
-		hotplate.setMaxIterations(100);
-		hotplate.setTempThreshold(0.001);
+		hotplate.setMaxIterations(Integer.parseInt(inputs.get("# Iterations").getText()));
+		hotplate.setTempThreshold(Double.parseDouble(inputs.get("Min. Temp Threshold").getText()));
 
 		hotplate.setDiffusionListener(this);
 		
