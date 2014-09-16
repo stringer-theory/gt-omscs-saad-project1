@@ -94,7 +94,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	private JComboBox<String> simulationCombo;
 
 	private JComboBox<String> simulationCombo(){
-		String[] options = {"Tpdahp","Tpfahp","Twfahp","4"};
+		String[] options = {"Tpdahp","Tpfahp","Twfahp","TWfohp"};
 		simulationCombo = new JComboBox<String>(options);
 		simulationCombo.setActionCommand("simulation");
 		simulationCombo.addActionListener(this);
@@ -185,16 +185,19 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		// long totalTime = 0;
 
 		System.out.println(inputs.get("Dimension"));
-		dimension = Integer.parseInt(inputs.get("Dimension").getText());
-		top = Double.parseDouble(inputs.get("Top").getText());
-		bottom = Double.parseDouble(inputs.get("Bot").getText());
-		left = Double.parseDouble(inputs.get("Left").getText());
-		right = Double.parseDouble(inputs.get("Right").getText());
+		dimension 	= Integer.parseInt(inputs.get("Dimension").getText());
+		top 		= Double.parseDouble(inputs.get("Top").getText());
+		bottom 		= Double.parseDouble(inputs.get("Bot").getText());
+		left 		= Double.parseDouble(inputs.get("Left").getText());
+		right 		= Double.parseDouble(inputs.get("Right").getText());
 
 		System.out.println(dimension + "," + top + "," + bottom  + "," + left  + "," + right);
 		
 		switch(i){
-			case 0: hotplate = new Tpdahp.Plate(dimension, top, bottom, left, right);
+			case 0: hotplate = new Tpdahp.Plate(dimension, top, bottom, left, right); break;
+			case 1: hotplate = new Tpfahp.Plate(dimension, top, bottom, left, right); break;
+			case 2: hotplate = new Twfahp.Plate(dimension, top, bottom, left, right); break;
+			case 3: hotplate = new Tpdohp.Plate(dimension, top, bottom, left, right); break;
 		}
 
 		System.out.println(hotplate);		
