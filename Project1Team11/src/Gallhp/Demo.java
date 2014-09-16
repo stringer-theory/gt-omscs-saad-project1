@@ -11,8 +11,9 @@ import java.io.*;
 
 import common.*;
 import Tpdahp.*;
-// import Tpfahp.*;
-// import Twfahp.*;
+import Tpfahp.*;
+import Twfahp.*;
+import Tpdohp.*;
 
 public class Demo extends JFrame implements ActionListener, DiffusionListener {
     public static void main(String[] args) {
@@ -94,7 +95,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	private JComboBox<String> simulationCombo;
 
 	private JComboBox<String> simulationCombo(){
-		String[] options = {"Tpdahp","Tpfahp","Twfahp","TWfohp"};
+		String[] options = {"Tpdahp","Tpfahp","Twfahp","Tpdohp"};
 		simulationCombo = new JComboBox<String>(options);
 		simulationCombo.setActionCommand("simulation");
 		simulationCombo.addActionListener(this);
@@ -184,23 +185,26 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		// long startTime = 0;
 		// long totalTime = 0;
 
-		System.out.println(inputs.get("Dimension"));
+		// System.out.println(inputs.get("Dimension"));
 		dimension 	= Integer.parseInt(inputs.get("Dimension").getText());
 		top 		= Double.parseDouble(inputs.get("Top").getText());
 		bottom 		= Double.parseDouble(inputs.get("Bot").getText());
 		left 		= Double.parseDouble(inputs.get("Left").getText());
 		right 		= Double.parseDouble(inputs.get("Right").getText());
 
-		System.out.println(dimension + "," + top + "," + bottom  + "," + left  + "," + right);
+		// System.out.println(dimension + "," + top + "," + bottom  + "," + left  + "," + right);
 		
 		switch(i){
 			case 0: hotplate = new Tpdahp.Plate(dimension, top, bottom, left, right); break;
-			case 1: hotplate = new Tpfahp.Plate(dimension, top, bottom, left, right); break;
-			case 2: hotplate = new Twfahp.Plate(dimension, top, bottom, left, right); break;
+			case 1: hotplate = new Tpfahp.Plate(dimension, (float)top, (float)bottom, (float)left, (float)right); break;
+			case 2: hotplate = new Twfahp.Plate(dimension, (float)top, (float)bottom, (float)left, (float)right); break;
 			case 3: hotplate = new Tpdohp.Plate(dimension, top, bottom, left, right); break;
 		}
 
-		System.out.println(hotplate);		
+		// System.out.println(hotplate);
+		hotplate.setMaxIterations(100);
+		hotplate.setTempThreshold(0.001);
+
 		hotplate.setDiffusionListener(this);
 		
 		// startTime = System.currentTimeMillis();
@@ -218,8 +222,12 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	}
 	
 	public void diffusionDone(int finalIter){
-		System.out.println("diffusionDone:start");
+		// System.out.println("diffusionDone:start");
 		double[][] matrix = hotplate.getMatrix();
+		// System.out.println("in diffusionDone");
+		// for(double[] arr: matrix){
+		// 	System.out.println(java.util.Arrays.toString(arr));
+		// }
 		if(viz != null){
 			contents.remove(viz);
 		}
@@ -227,7 +235,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		contents.add(viz);
 		validate();
 		repaint();
-		System.out.println("diffusionDone:finish");
+		// System.out.println("diffusionDone:finish");
 	}
 
 
