@@ -169,7 +169,11 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	        return;
 		}
 		if("Run".equals(cmd)){
-	        run(simulationCombo.getSelectedIndex());
+			try{
+		        run(simulationCombo.getSelectedIndex());
+			}catch(NumberFormatException nfe){
+				JOptionPane.showMessageDialog(null,"Please correct input. All fields need numbers");
+			}
 	        return;
 		}
 	}
@@ -181,7 +185,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	private double bottom = 0;
 	private PlateInterface hotplate;
 
-	private void run(int i){
+	private void run(int i) throws NumberFormatException{
 		// long startTime = 0;
 		// long totalTime = 0;
 
