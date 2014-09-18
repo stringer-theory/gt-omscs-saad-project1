@@ -50,13 +50,7 @@ public class DemoBase{
 	
 	// Confine edge temperature to [0, 100] range
 	protected int ensureInRange(String edgeTemp) {
-		int tmpTemp = Integer.parseInt(edgeTemp);
-		if (tmpTemp < 0) {
-			tmpTemp = 0;
-		} else if (tmpTemp > 100) {
-			tmpTemp = 100;
-		}
-		return tmpTemp;
+		return Math.min(Math.max(Integer.parseInt(edgeTemp), 0), 100);
 	}
 
 	protected void usage(){
