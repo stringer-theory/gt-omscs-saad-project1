@@ -298,7 +298,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 
 	public void iterationDone(int currIter) {
 		this.setNumberOfIterations(currIter);
-		System.out.println("i:"+currIter);
+		// System.out.println("i:"+currIter);
 		diffusionDone(currIter);
 	}
 
