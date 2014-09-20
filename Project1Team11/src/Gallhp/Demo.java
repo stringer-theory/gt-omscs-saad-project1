@@ -225,7 +225,8 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 	private Grid viz;
 
 	public void iterationDone(int currIter) {
-		// System.out.println("i:"+currIter);
+		System.out.println("i:"+currIter);
+		diffusionDone(currIter);
 	}
 	
 	public void diffusionDone(int finalIter){
