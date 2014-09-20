@@ -1,38 +1,43 @@
 package Twfahp;
 
-import common.*;
+import common.DemoBase;
+import common.DiffusionListener;
+import common.MetricRecorder;
 
-public class Demo extends DemoBase implements DiffusionListener{
+public class Demo extends DemoBase implements DiffusionListener {
+
+	private int maxIterations = 1000;
+	private double temperateThreshold = 0.001;
 
 	public static void main(String[] args) {
 		Demo demo = new Demo(args);
-		demo.run();			
+		demo.setMetricRecorder(new MetricRecorder());
+		demo.getMetricRecorder().preRunSetup();
+		demo.run();
+		demo.getMetricRecorder().postRunCleanup();
+		demo.printMatrix(demo.getHotplate().getMatrix());
+		demo.printMetrics();
 	}
 
-	public Demo(String[] args){
-		processArgs(args);		
+	public Demo(String[] args) {
+		super.processArgs(args);
 	}
 
-	public void run(){
-		long startTime = 0;
-		long totalTime = 0;
-		hotplate = new Plate((int) dimension, (float) top, (float) bottom, (float) left, (float) right);
-		hotplate.setDiffusionListener(this);
-		
-		startTime = System.currentTimeMillis();
-		hotplate.diffuse();
-		totalTime = System.currentTimeMillis() - startTime;
-		
-		System.out.println("Run Time " + totalTime + "ms");
-		System.out.println("Max Memory " + Runtime.getRuntime().maxMemory() + " bytes");
+	public void run() {
+		super.hotplate = new Plate(super.dimension, (float) super.top,
+				(float) super.bottom, (float) super.left, (float) super.right);
+		super.hotplate.setDiffusionListener(this);
+		super.hotplate.setMaxIterations(this.maxIterations);
+		super.hotplate.setTempThreshold(this.temperateThreshold);
+
+		super.hotplate.diffuse();
 	}
 
 	public void iterationDone(int currIter) {
-		// System.out.println("i:"+currIter);
+		super.setNumberOfIterations(currIter);
 	}
-	
-	public void diffusionDone(int finalIter){
-		double[][] matrix = hotplate.getMatrix();
-		printMatrix(matrix);
+
+	public void diffusionDone(int finalIter) {
+		super.setNumberOfIterations(finalIter);
 	}
 }
