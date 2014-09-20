@@ -1,85 +1,99 @@
 package common;
 
-public class DemoBase{
+public class DemoBase {
 
-	protected int dimension = 0; 
+	protected int dimension = 0;
 	protected double left = 0;
 	protected double right = 0;
 	protected double top = 0;
 	protected double bottom = 0;
 	protected PlateInterface hotplate;
+	protected int numberOfIterations = 0;
+	private MetricRecordInterface metricRecorder;
 
-	public DemoBase(){}
+	public DemoBase() {
+	}
+
+	public MetricRecordInterface getMetricRecorder() {
+		return metricRecorder;
+	}
+
+	public void setMetricRecorder(MetricRecordInterface metricRecorder) {
+		this.metricRecorder = metricRecorder;
+	}
+
+	public PlateInterface getHotplate() {
+		return hotplate;
+	}
+
+	public void setHotplate(PlateInterface hotplate) {
+		this.hotplate = hotplate;
+	}
+
+	public int getNumberOfIterations() {
+		return numberOfIterations;
+	}
+
+	public void setNumberOfIterations(int numberOfIterations) {
+		this.numberOfIterations = numberOfIterations;
+	}
 
 	protected void printMatrix(double[][] matrix) {
 		System.out.println("");
 		for (int row = 1; row < matrix.length - 1; row++) {
 			for (int col = 1; col < matrix.length - 1; col++) {
-				System.out.printf("%-6s ", String.valueOf(Math.round(matrix[row][col] * 100.0)/100.0));
+				System.out.printf("%-6s ", String.valueOf(Math
+						.round(matrix[row][col] * 100.0) / 100.0));
 			}
 			System.out.println("");
 		}
 		System.out.println("");
 	}
 
-	protected void processArgs(String[] args){
-		// insure args are passed as pairs (flag and value)
-		if (args.length>0 && args.length % 2 == 0) {
+	protected void processArgs(String[] args) {
+		// ensure args are passed as pairs (flag and value)
+		if (args.length > 0 && args.length % 2 == 0) {
 			// parse each pair and assign value to appropriate variable
-			for (int loop = 0; loop < args.length; loop = loop + 2) {
-				switch (args[loop]) { 
-				// dimension
-				case "-d":	
-					dimension = Integer.parseInt(args[loop + 1]);
-					break;
-				// left edge (range 0-100)	
-				case "-l":
-					left = Integer.parseInt(args[loop + 1]);
-					if (left < 0) {
-						left = 0;
-					} else if (left > 100) {
-						left = 100;
-					}
-					break;
-				// right edge (range 0-100)
-				case "-r":
-					right = Integer.parseInt(args[loop + 1]);
-					if (right < 0) {
-						right = 0;
-					} else if (right > 100) {
-						right = 100;
-					}
-					break;
-				// top edge (range 0-100)
-				case "-t":
-					top = Integer.parseInt(args[loop + 1]);
-					if (top < 0) {
-						top = 0;
-					} else if (top > 100) {
-						top = 100;
-					}
-					break;
-				// bottom edge (range 0-100)
-				case "-b":
-					bottom = Integer.parseInt(args[loop + 1]);
-					if (bottom < 0) {
-						bottom = 0;
-					} else if (bottom > 100) {
-						bottom = 100;
-					}
-					break;
-				// unknown flag	
-				default:
-					usage();
+			for (int i = 0; i < args.length; i = i + 2) {
+				String flag = args[i];
+
+				if (flag.equals("-d")) {
+					dimension = Integer.parseInt(args[i + 1]);
+				} else if (flag.equals("-l")) {
+					left = ensureInRange(args[i + 1]);
+				} else if (flag.equals("-r")) {
+					right = ensureInRange(args[i + 1]);
+				} else if (flag.equals("-t")) {
+					top = ensureInRange(args[i + 1]);
+				} else if (flag.equals("-b")) {
+					bottom = ensureInRange(args[i + 1]);
+				} else {
+					this.usage();
 				}
 			}
 		} else {
-			usage();
+			this.usage();
 		}
 	}
 
-	protected void usage(){
-		System.out.println("Usage: Demo -d: <dimension> -t <top> -b: <bottom> -l <left> -r <right>");
+	protected void printMetrics() {
+		System.out.println("Run Time "
+				+ this.getMetricRecorder().getDurationOfDiffusion() + " ns");
+		System.out.println("Used Memory "
+				+ this.getMetricRecorder().getAmountOfMemoryUsed() + " bytes");
+		System.out.println("Number of Iterations "
+				+ this.getNumberOfIterations());
+	}
+
+	// Confine edge temperature to [0, 100] range
+	protected int ensureInRange(String edgeTemp) {
+		return Math.min(Math.max(Integer.parseInt(edgeTemp), 0), 100);
+	}
+
+	protected void usage() {
+		System.out
+				.println("Usage: Demo -d: <dimension> -t <top> -b: <bottom> -l <left> -r <right>");
 		System.exit(-1);
 	}
+
 }
