@@ -88,8 +88,9 @@ public class Grid extends JPanel {
 				BufferedImage.TYPE_INT_ARGB);
 		Graphics anotherGraphics = bi.createGraphics();
 
-		for (int i = 0; i < NUMBER_OF_ROWS; i++)
-			for (int j = 0; j < NUMBER_OF_COLUMNS; j++)
+        // fix to ignore the edges added.
+		for (int i = 1; i < (NUMBER_OF_ROWS-1); i++)
+			for (int j = 1; j < (NUMBER_OF_COLUMNS-1); j++)
 				paintSpot(anotherGraphics, i, j, matrix[i][j]);
 
 		aGraphics.drawImage(bi, 0, 0, this);

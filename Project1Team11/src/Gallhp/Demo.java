@@ -118,7 +118,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 
 		ctrlsPanel.add(button("Run"));
 		ctrlsPanel.add(button("Pause"));
-		ctrlsPanel.add(button("stop"));
+		ctrlsPanel.add(button("Stop"));
 
 		return ctrlsPanel;
 	}
@@ -210,6 +210,10 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 			}
 			return;
 		}
+		if("Pause".equals(cmd) || "Stop".equals(cmd)){
+			JOptionPane.showMessageDialog(null, "Coming soon!");
+			return;
+		}
 	}
 
 	private int dimension = 0;
@@ -295,6 +299,8 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 
 	public void iterationDone(int currIter) {
 		this.setNumberOfIterations(currIter);
+		// System.out.println("i:"+currIter);
+		diffusionDone(currIter);
 	}
 
 	public void diffusionDone(int finalIter) {
