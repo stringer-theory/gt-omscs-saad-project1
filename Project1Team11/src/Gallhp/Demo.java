@@ -176,6 +176,10 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 			}
 	        return;
 		}
+		if("Pause".equals(cmd) || "Stop".equals(cmd)){
+			JOptionPane.showMessageDialog(null, "Coming soon!");
+			return;
+		}
 	}
 
 	private int dimension = 0; 
