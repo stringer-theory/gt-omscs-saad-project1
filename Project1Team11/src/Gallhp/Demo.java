@@ -87,7 +87,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 
 		ctrlsPanel.add(button("Run"));
 		ctrlsPanel.add(button("Pause"));
-		ctrlsPanel.add(button("stop"));
+		ctrlsPanel.add(button("Stop"));
 
 		return ctrlsPanel;
 	}
