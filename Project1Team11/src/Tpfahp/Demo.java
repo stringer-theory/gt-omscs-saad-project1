@@ -15,7 +15,6 @@ public class Demo extends DemoBase implements DiffusionListener {
 		demo.getMetricRecorder().preRunSetup();
 		demo.run();
 		demo.getMetricRecorder().postRunCleanup();
-		demo.printMatrix(demo.getHotplate().getMatrix());
 		demo.printMetrics();
 	}
 
@@ -39,5 +38,6 @@ public class Demo extends DemoBase implements DiffusionListener {
 
 	public void diffusionDone(int finalIter) {
 		setNumberOfIterations(finalIter);
+		printMatrix(hotplate.getMatrix());
 	}
 }
