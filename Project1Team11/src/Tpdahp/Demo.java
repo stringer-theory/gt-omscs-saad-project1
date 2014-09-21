@@ -20,24 +20,24 @@ public class Demo extends DemoBase implements DiffusionListener {
 	}
 
 	public Demo(String[] args) {
-		super.processArgs(args);
+		processArgs(args);
 	}
 
 	public void run() {
-		super.hotplate = new Plate(super.dimension, super.top, super.bottom,
-				super.left, super.right);
-		super.hotplate.setDiffusionListener(this);
-		super.hotplate.setMaxIterations(this.maxIterations);
-		super.hotplate.setTempThreshold(this.temperateThreshold);
+		hotplate = new Plate(dimension, top, bottom,
+				left, right);
+		hotplate.setDiffusionListener(this);
+		hotplate.setMaxIterations(this.maxIterations);
+		hotplate.setTempThreshold(this.temperateThreshold);
 
-		super.hotplate.diffuse();
+		hotplate.diffuse();
 	}
 
 	public void iterationDone(int currIter) {
-		super.setNumberOfIterations(currIter);
+		setNumberOfIterations(currIter);
 	}
 
 	public void diffusionDone(int finalIter) {
-		super.setNumberOfIterations(finalIter);
+		setNumberOfIterations(finalIter);
 	}
 }
