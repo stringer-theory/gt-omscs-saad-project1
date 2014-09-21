@@ -12,9 +12,9 @@ public class Plate implements PlateInterface {
 	private Float bottomTemp;
 	private Float leftTemp;
 	private Float rightTemp;
-    private Float[][] oldmatrix;
-    private Float[][] newmatrix;
-    private DiffusionListener dl;
+	private Float[][] oldmatrix;
+	private Float[][] newmatrix;
+	private DiffusionListener dl;
 
 	public Plate(int dim, float top, float bottom, float left, float right) {
 		dimension = dim;
@@ -23,8 +23,8 @@ public class Plate implements PlateInterface {
 		leftTemp = left;
 		rightTemp = right;
 		oldmatrix = new Float[dimension + 2][dimension + 2];
-	 	newmatrix = new Float[dimension + 2][dimension + 2];
-		
+		newmatrix = new Float[dimension + 2][dimension + 2];
+
 		initializeMatrix();
 	}
 
@@ -33,52 +33,54 @@ public class Plate implements PlateInterface {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
 				if (row == 0) {
-					newmatrix[row][col] = new Float (topTemp);
+					newmatrix[row][col] = new Float(topTemp);
 				} else if (col == 0) {
-					newmatrix[row][col] = new Float (leftTemp);
+					newmatrix[row][col] = new Float(leftTemp);
 				} else if (row == dimension + 1) {
-					newmatrix[row][col] = new Float (bottomTemp);
+					newmatrix[row][col] = new Float(bottomTemp);
 				} else if (col == dimension + 1) {
-					newmatrix[row][col] =new Float (rightTemp);
+					newmatrix[row][col] = new Float(rightTemp);
 				} else {
-					newmatrix[row][col] = new Float (0);
+					newmatrix[row][col] = new Float(0);
 				}
 			}
 		}
 		// initialize the old matrix by copying the new
-		swapMatrix();	
+		swapMatrix();
 	}
 
 	// overlay the values in the old matrix with the values in the new matrix
 	private void swapMatrix() {
-		for (int row = 0; row < dimension+2; row++) {
-			for (int col = 0; col < dimension+2; col++) {
+		for (int row = 0; row < dimension + 2; row++) {
+			for (int col = 0; col < dimension + 2; col++) {
 				oldmatrix[row][col] = newmatrix[row][col];
 			}
 		}
 	}
-	
-	public void setTempThreshold(double threshold){
+
+	public void setTempThreshold(double threshold) {
 		this.tempThreshold = threshold;
 	}
-	
-	public void setMaxIterations(int maxIterations){
+
+	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
-	
-	public void setDiffusionListener(DiffusionListener dl){
+
+	public void setDiffusionListener(DiffusionListener dl) {
 		this.dl = dl;
 	}
 
 	public void diffuse() {
 		boolean done = false;
 		int iterations = 0;
-		
-		while (!done) {
+
+		while (!done && iterations <= this.maxIterations) {
 			done = true;
 			for (int row = 1; row < dimension + 1; row++) {
 				for (int col = 1; col < dimension + 1; col++) {
-					newmatrix[row][col] = new Float ((oldmatrix[row + 1][col] + oldmatrix[row - 1][col] + oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0);
+					newmatrix[row][col] = new Float(
+							(oldmatrix[row + 1][col] + oldmatrix[row - 1][col]
+									+ oldmatrix[row][col + 1] + oldmatrix[row][col - 1]) / 4.0);
 					if (Math.abs(newmatrix[row][col] - oldmatrix[row][col]) >= tempThreshold) {
 						done = false;
 					}
@@ -92,23 +94,25 @@ public class Plate implements PlateInterface {
 		}
 		dl.diffusionDone(iterations);
 	}
-	public double[][] getMatrix(){
+
+	public double[][] getMatrix() {
 		// Convert matrix (after computations) to adhere to interface
 		return convertMatrix(newmatrix);
 	}
+
 	// Convert float matrix to double matrix
 	private double[][] convertMatrix(Float[][] newmatrix2) {
 		int l = newmatrix2.length;
 		double[][] convertedMatrix = new double[l][l];
-		
+
 		for (int row = 0; row < l; row++) {
 			for (int col = 0; col < l; col++) {
 				double converted = newmatrix2[row][col];
 				convertedMatrix[row][col] = converted;
 			}
 		}
-		
+
 		return convertedMatrix;
 	}
-		
+
 }

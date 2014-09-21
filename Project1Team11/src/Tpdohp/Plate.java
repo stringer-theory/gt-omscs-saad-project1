@@ -153,10 +153,10 @@ public class Plate implements PlateInterface {
 		boolean finished = false;
 		Point currentOldRowFirstPoint = this.plateOnePoints[0][0];
 		Point currentNewRowFirstPoint = this.plateTwoPoints[0][0];
-		
+
 		while (!finished && this.iterations < this.maxIterations) {
 			int numberOfPointsWithinThreshold = 0;
-			
+
 			// process each row from top to bottom and left to right
 			for (int row = 1; row <= this.dimension; row++) {
 
@@ -225,9 +225,17 @@ public class Plate implements PlateInterface {
 							+ rightTemperature + bottomTemperature + leftTemperature) / 4.0;
 					currentNewPoint.setTemperature(newPointTemperature);
 
-					// TODO: add more rigorous criteria here
+					// check this point to see if it is within the threshold of
+					// minimum change
 					if (Math.abs(oldPointTemperature - newPointTemperature) < this.temperatureThreshold) {
+						// if this point is within the threshold of minimum
+						// change, then increment the counter for the number of
+						// points that are within the minimum temperature
+						// threshold
 						numberOfPointsWithinThreshold++;
+
+						// if all of the points within the matrix are within the
+						// threshold of minimum change, then we are finished
 						if (numberOfPointsWithinThreshold == this.dimension
 								* this.dimension) {
 							finished = true;
@@ -244,6 +252,7 @@ public class Plate implements PlateInterface {
 			this.iterations++;
 			this.diffusionListener.iterationDone(this.iterations);
 
+			// swap our old and new matrices
 			if (this.iterations % 2 == 0) {
 				currentOldRowFirstPoint = this.plateOnePoints[0][0];
 				currentNewRowFirstPoint = this.plateTwoPoints[0][0];
@@ -253,10 +262,8 @@ public class Plate implements PlateInterface {
 				currentNewRowFirstPoint = this.plateOnePoints[0][0];
 				this.lastUpdatedPlatePoints = this.plateTwoPoints;
 			}
-
-			this.diffusionListener.iterationDone(iterations);
 		}
 
-		this.diffusionListener.diffusionDone(iterations);
+		this.diffusionListener.diffusionDone(this.iterations);
 	}
 }

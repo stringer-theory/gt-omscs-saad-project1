@@ -237,23 +237,24 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		this.setMetricRecorder(new MetricRecorder());
 		this.getMetricRecorder().preRunSetup();
 
+		String plateImplementationName = null;
 		switch (i) {
 		case 0:
-			System.out.println("Tpdahp test run");
+			plateImplementationName = "Tpdahp";
 			hotplate = new Tpdahp.Plate(dimension, top, bottom, left, right);
 			break;
 		case 1:
-			System.out.println("Tpfahp test run");
+			plateImplementationName = "Tpfahp";
 			hotplate = new Tpfahp.Plate(dimension, (float) top, (float) bottom,
 					(float) left, (float) right);
 			break;
 		case 2:
-			System.out.println("Twfahp test run");
+			plateImplementationName = "Twfahp";
 			hotplate = new Twfahp.Plate(dimension, (float) top, (float) bottom,
 					(float) left, (float) right);
 			break;
 		case 3:
-			System.out.println("Tpdohp test run");
+			plateImplementationName = "Tpdohp";
 			hotplate = new Tpdohp.Plate(dimension, top, bottom, left, right);
 			break;
 		}
@@ -271,26 +272,26 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		hotplate.diffuse();
 
 		this.getMetricRecorder().postRunCleanup();
-		
-		this.logTestMetrics();
+
+		this.logTestMetrics(plateImplementationName);
 	}
 
 	private void logTestParameters(String maxIterations, String minTempThreshold) {
-		System.out.println("Dependent test parameters: dim="
-				+ String.valueOf(dimension) + ", top temp ="
-				+ String.valueOf(top) + ", bottom temp ="
-				+ String.valueOf(bottom) + ", left temp ="
-				+ String.valueOf(left) + ", right temp ="
-				+ String.valueOf(right) + ", max iterations=" + maxIterations
-				+ ", min temp threshold=" + minTempThreshold);
+		System.out
+				.println("Dimension, Top Edge Temperature, Bottom Edge Temperature, Left Edge Temperature, Right Edge Temperature, Maximum Allowed Iterations, Mininmum Temperature Threshold");
+
+		System.out.println(String.valueOf(dimension) + ", "
+				+ String.valueOf(top) + ", " + String.valueOf(bottom) + ", "
+				+ String.valueOf(left) + ", " + String.valueOf(right) + ", "
+				+ maxIterations + ", " + minTempThreshold);
 	}
 
-	private void logTestMetrics() {
-		System.out.println("Run Time "
-				+ this.getMetricRecorder().getDurationOfDiffusion() + " ns");
-		System.out.println("Used Memory "
-				+ this.getMetricRecorder().getAmountOfMemoryUsed() + " bytes");
-		System.out.println("Number of Iterations "
+	private void logTestMetrics(String plateImplementationName) {
+		System.out
+				.println("Plate Type, Run Duration in ns, Memory Used in Bytes, Number of Iterations");
+		System.out.println(plateImplementationName + ", "
+				+ this.getMetricRecorder().getDurationOfDiffusion() + ", "
+				+ this.getMetricRecorder().getAmountOfMemoryUsed() + ", "
 				+ this.getNumberOfIterations());
 	}
 
