@@ -163,7 +163,7 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		return label;
 	}
 
-	private HashMap<String, JTextField> inputs = new HashMap<>();
+	private HashMap<String, JTextField> inputs = new HashMap<String, JTextField>();
 
 	private JPanel inputField(String name) {
 		JPanel inputPanel = new JPanel();
