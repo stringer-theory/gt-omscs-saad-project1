@@ -1,0 +1,34 @@
+title GUI Diffusion Simulation
+
+User->Demo: execute
+Demo->Demo: createUI()
+loop While not closed
+	User->Demo: sets input manually
+	User->Demo: clicks Run
+	alt happy path: all input good
+		Demo->Demo: run
+		Demo->MetricRecorder: create
+		Demo->Demo: setMetricRecorder()
+		MetricRecorder->MetricRecorder: preRunSetup()
+		Demo->Demo: run
+		Demo->Plate: create
+		Demo->Plate: set various inputs
+		Demo->Demo: logTestParameters()
+
+		Demo->Plate: diffuse()
+		Plate->Demo: iterationDone()
+		Demo->Demo: diffusionDone()
+
+		Demo->Demo: postRunCleanup()
+		Demo->Demo: logTestMetrics
+		Demo->User: display result
+
+		Plate->Demo: diffusionDone()
+		Demo->Grid: create
+		Grid->Grid: paintSpot()
+		Demo->User: display result
+
+	else error path: errors in input
+		Demo->User: display simple error message
+	end
+end

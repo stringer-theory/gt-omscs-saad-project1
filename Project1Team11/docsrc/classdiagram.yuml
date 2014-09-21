@@ -1,0 +1,44 @@
+
+[DemoBase|#dimension:int;#left:double;#right:double;#top:double;#bottom:double;#hotplate:PlateInterface;#numberOfIterations:int;-metricsRecorder:MetricsRecorderInterface|#printMatrix();#processArgs();#usage();#printMetrics();#ensureInRange()], 
+[MetricRecorder|-amountOfMemoryUsed;-durationOfDiffusion;-startTime;-beginningUsedMemory|],
+
+[TXYahp.Demo||Demo();+run()], 
+[Tpdohp.Demo||Demo();+run()], 
+
+[TXYahp.Plate|-tempThreshold;-maxIterations;dimension;top;bottom;left;right;oldMatrix;newMatrix;dl:DiffusionListener|+Plate();-swapMatrix()]
+
+[Tpdohp.Plate|-tempThreshold;-maxIterations;dimension;top;bottom;left;right;plateOnePoints;plateTwoPoints;dl:DiffusionListener|+Plate();]
+[Point|-temperature;-top;-bottom;-left;-right|]
+
+[PlateInterface|+initializeMatrix();setTempThreshold();setMaxIterations();+diffuse();+setDiffusionListener();+getMatrix()],
+[DiffusionListener|+iterationDone();+diffusionDone()],
+[MetricRecorderInterface|+preRunSetup();+postRunCleanup();+getAmountOfMemoryUsed();+getDurationOfDiffusion()],
+
+/*edges below*/
+[PlateInterface]^-.-[TXYahp.Plate],
+[MetricRecorderInterface]^-.-[MetricRecorder]
+[DiffusionListener]^-.-[TXYahp.Demo]
+[DemoBase]^-[TXYahp.Demo]
+[TXYahp.Demo]realizes -.->[PlateInterface]
+[TXYahp.Demo]realizes -.->[MetricRecorderInterface]
+
+[PlateInterface]^-.-[Tpdohp.Plate],
+[Tpdohp.Plate]++-*>[Point]
+[DiffusionListener]^-.-[Tpdohp.Demo]
+[DemoBase]^-[Tpdohp.Demo]
+[Tpdohp.Demo]realizes -.->[PlateInterface]
+[Tpdohp.Demo]realizes -.->[MetricRecorderInterface]
+
+
+// second diagram
+[Gallhp.Demo||Demo();+createUI();+run(i:int);-logTestParameters();-logTestMetrics()],
+[Grid|matrix|Grid(matrix);#paintComponent();-paintSpot();#getPreferredSize()],
+
+[Gallhp.Demo]++-1>[MetricRecorder]
+[Gallhp.Demo]++-1>[Tpdohp.Plate]
+[Gallhp.Demo]++-3>[TXYahp.Plate]
+[Gallhp.Demo]++-1>[Grid]
+[Gallhp.Demo]realizes -.->[MetricRecorderInterface]
+[Gallhp.Demo]realizes -.->[PlateInterface]
+[DiffusionListener]^-.-[Gallhp.Demo]
+

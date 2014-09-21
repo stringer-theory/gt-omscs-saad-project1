@@ -1,0 +1,25 @@
+title CLI Diffusion Simulation
+
+note over User,Demo: User to Demo "calls" are human actions
+User->Demo: execute
+Demo->DemoBase: processArgs()
+Demo->MetricRecorder: create
+Demo->DemoBase: setMetricRecorder()
+MetricRecorder->MetricRecorder: preRunSetup()
+Demo->Demo: run
+Demo->Plate: create
+Demo->Plate: setDiffusionListener()
+Demo->Plate: setMaxIterations()
+Demo->Plate: setTempThreshold()
+MetricRecorder->MetricRecorder: preRunSetup()
+
+Demo->Plate: diffuse()
+note right of Demo: CLI Demos do not use iterationDone()
+Plate->Demo: iterationDone()
+Plate->Demo: diffusionDone()
+Demo->DemoBase: printMatrix()
+MetricRecorder->MetricRecorder: postRunSetup()
+
+note over Demo: Swing actions abstracted out here
+Demo->User: display result
+
