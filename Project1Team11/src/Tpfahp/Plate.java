@@ -3,6 +3,13 @@ package Tpfahp;
 
 import common.*;
 
+/**
+ * Tpfahp stands for Textual (no GUI) primitive (non-wrapped Java type) float
+ * (for node values and computations) array (uses arrays to access neighboring points)
+ * hot plate.
+ * 
+ * @author Team 11
+ */
 public class Plate implements PlateInterface {
 
 	private double tempThreshold = .0001;
@@ -16,6 +23,16 @@ public class Plate implements PlateInterface {
 	private float[][] newMatrix;
 	private DiffusionListener dl;
 
+	/**
+	 * Creates a plate with a height of dim and width of dim. Also
+	 * sets the surrounding edge temperatures.
+	 * 
+	 * @param dimension
+	 * @param topTemperature
+	 * @param bottomTemperature
+	 * @param leftTemperature
+	 * @param rightTemperature
+	 */
 	public Plate(int dim, float top, float bottom, float left, float right) {
 		dimension = dim;
 		topTemp = top;
@@ -28,7 +45,10 @@ public class Plate implements PlateInterface {
 		initializeMatrix();
 	}
 
-	// initialize matrix to edge values and zero for all interior nodes
+	/**
+	 * Initializes the plate's edge node values with edge temperatures.
+	 * Zeroes out interior nodes.
+	 */
 	public void initializeMatrix() {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
@@ -49,18 +69,42 @@ public class Plate implements PlateInterface {
 		swapMatrix();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setTempThreshold(double)
+	 */
+	@Override
 	public void setTempThreshold(double threshold) {
 		this.tempThreshold = threshold;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setMaxIterations(int)
+	 */
+	@Override
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setDiffusionListener(common.DiffusionListener)
+	 */
+	@Override
 	public void setDiffusionListener(DiffusionListener dl) {
 		this.dl = dl;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#diffuse()
+	 */
+	@Override
 	public void diffuse() {
 		boolean done = false;
 		int iterations = 0;
@@ -85,7 +129,13 @@ public class Plate implements PlateInterface {
 		}
 		dl.diffusionDone(iterations);
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#getMatrix()
+	 */
+	@Override
 	public double[][] getMatrix() {
 		// Convert matrix (after computations) to adhere to interface
 		return convertMatrix(newMatrix);
