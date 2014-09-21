@@ -33,7 +33,11 @@ public class Grid extends JPanel {
 		NUMBER_OF_ROWS = matrix[0].length;
 		NUMBER_OF_COLUMNS = matrix.length;
 		CELL_HEIGHT = GRID_SIZE / NUMBER_OF_COLUMNS;
-		CELL_WIDTH = GRID_SIZE / NUMBER_OF_ROWS;
+        CELL_HEIGHT = (CELL_HEIGHT < 1) ? 1 : CELL_HEIGHT;
+		
+        CELL_WIDTH = GRID_SIZE / NUMBER_OF_ROWS;
+        CELL_WIDTH = (CELL_WIDTH < 1) ? 1 : CELL_WIDTH;
+        // System.out.println("cw:" + CELL_WIDTH +",ch:" + CELL_HEIGHT);
 	}
 
 	/**
