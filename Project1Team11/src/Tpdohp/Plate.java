@@ -3,6 +3,18 @@ package Tpdohp;
 import common.DiffusionListener;
 import common.PlateInterface;
 
+/**
+ * Tpdohp stands for Textual (no GUI) primitive (non-wrapped Java type) double
+ * (to hold the point values) object (uses object graph references instead of
+ * arrays to access neighboring points) hot plate. It uses an object graph of
+ * Point class objects to represent a hot plate. The Point class represents a
+ * single point in the plate. A Point class instance has references to its top,
+ * bottom, left, and right neighboring points. If instead of a neighboring point
+ * there is an edge, that reference is null. Each Point class instance also
+ * holds its temperature in a primitive double.
+ * 
+ * @author Team 11
+ */
 public class Plate implements PlateInterface {
 
 	private int dimension;
@@ -16,15 +28,32 @@ public class Plate implements PlateInterface {
 	// a two dimensional array of points is used to connect all of the points
 	// and to create and two return a matrix of temperatures for printing, it is
 	// not used to update point temperatures
-	public Point[][] plateOnePoints;
-	public Point[][] plateTwoPoints;
+	private Point[][] plateOnePoints;
+	private Point[][] plateTwoPoints;
+	// after every iteration lastUpdatedPlatePoints will reference the last
+	// updated plate, whether that is plateOne or plateTwo
 	private Point[][] lastUpdatedPlatePoints;
 	private int iterations;
 
+	/**
+	 * Returns the number of iterations.
+	 * 
+	 * @return
+	 */
 	public int getIterations() {
 		return iterations;
 	}
 
+	/**
+	 * Creates a plate with a height of dimension and width of dimension. Also
+	 * sets the surrounding edge temperatures.
+	 * 
+	 * @param dimension
+	 * @param topTemperature
+	 * @param bottomTemperature
+	 * @param leftTemperature
+	 * @param rightTemperature
+	 */
 	public Plate(int dimension, double topTemperature,
 			double bottomTemperature, double leftTemperature,
 			double rightTemperature) {
@@ -40,6 +69,11 @@ public class Plate implements PlateInterface {
 		this.initializeMatrix();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#initializeMatrix()
+	 */
 	@Override
 	public void initializeMatrix() {
 		// create all points in both plates
@@ -108,26 +142,47 @@ public class Plate implements PlateInterface {
 		this.lastUpdatedPlatePoints = this.plateOnePoints;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setTempThreshold(double)
+	 */
 	@Override
 	public void setTempThreshold(double temperatureThreshold) {
 		this.temperatureThreshold = temperatureThreshold;
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setMaxIterations(int)
+	 */
 	@Override
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#setDiffusionListener(common.DiffusionListener)
+	 */
 	@Override
 	public void setDiffusionListener(DiffusionListener diffusionListener) {
 		this.diffusionListener = diffusionListener;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#getMatrix()
+	 */
 	@Override
 	public double[][] getMatrix() {
 
-		// adding two to account for the edges expected by the caller
+		// adding two to account for the edges expected by the caller, all of
+		// the edges are set to 0
 		double[][] matrix = new double[this.dimension + 2][this.dimension + 2];
 
 		for (int row = 0; row < this.dimension + 2; row++) {
@@ -147,6 +202,11 @@ public class Plate implements PlateInterface {
 		return matrix;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#diffuse()
+	 */
 	@Override
 	public void diffuse() {
 		this.iterations = 0;

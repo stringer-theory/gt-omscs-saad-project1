@@ -22,13 +22,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import common.DiffusionListener;
-import common.MetricRecordInterface;
+import common.MetricRecorderInterface;
 import common.MetricRecorder;
 import common.PlateInterface;
 
 public class Demo extends JFrame implements ActionListener, DiffusionListener {
 
-	private MetricRecordInterface metricRecorder;
+	private MetricRecorderInterface metricRecorder;
 	protected int numberOfIterations = 0;
 
 	public int getNumberOfIterations() {
@@ -39,11 +39,11 @@ public class Demo extends JFrame implements ActionListener, DiffusionListener {
 		this.numberOfIterations = numberOfIterations;
 	}
 
-	public MetricRecordInterface getMetricRecorder() {
+	public MetricRecorderInterface getMetricRecorder() {
 		return metricRecorder;
 	}
 
-	public void setMetricRecorder(MetricRecordInterface metricRecorder) {
+	public void setMetricRecorder(MetricRecorderInterface metricRecorder) {
 		this.metricRecorder = metricRecorder;
 	}
 

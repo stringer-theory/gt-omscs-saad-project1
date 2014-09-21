@@ -9,16 +9,16 @@ public class DemoBase {
 	protected double bottom = 0;
 	protected PlateInterface hotplate;
 	protected int numberOfIterations = 0;
-	private MetricRecordInterface metricRecorder;
+	private MetricRecorderInterface metricRecorder;
 
 	public DemoBase() {
 	}
 
-	public MetricRecordInterface getMetricRecorder() {
+	public MetricRecorderInterface getMetricRecorder() {
 		return metricRecorder;
 	}
 
-	public void setMetricRecorder(MetricRecordInterface metricRecorder) {
+	public void setMetricRecorder(MetricRecorderInterface metricRecorder) {
 		this.metricRecorder = metricRecorder;
 	}
 
