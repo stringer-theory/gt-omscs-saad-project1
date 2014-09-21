@@ -6,7 +6,7 @@ import common.*;
 /**
  * Tpfahp stands for Textual (no GUI) primitive (non-wrapped Java type) float
  * (for node values and computations) array (uses arrays to access neighboring points)
- * hot plate.
+ * hot plate. It uses a two-dimensional array of floats to represent the hot plate.
  * 
  * @author Team 11
  */
@@ -24,31 +24,33 @@ public class Plate implements PlateInterface {
 	private DiffusionListener dl;
 
 	/**
-	 * Creates a plate with a height of dim and width of dim. Also
+	 * Creates a plate with a height of dimension and width of dimension. Also
 	 * sets the surrounding edge temperatures.
 	 * 
 	 * @param dimension
-	 * @param topTemperature
-	 * @param bottomTemperature
-	 * @param leftTemperature
-	 * @param rightTemperature
+	 * @param topTemp
+	 * @param bottomTemp
+	 * @param leftTemp
+	 * @param rightTemp
 	 */
-	public Plate(int dim, float top, float bottom, float left, float right) {
-		dimension = dim;
-		topTemp = top;
-		bottomTemp = bottom;
-		leftTemp = left;
-		rightTemp = right;
+	public Plate(int dimension, float topTemp, float bottomTemp, float leftTemp, float rightTemp) {
+		this.dimension = dimension;
+		this.topTemp = topTemp;
+		this.bottomTemp = bottomTemp;
+		this.leftTemp = leftTemp;
+		this.rightTemp = rightTemp;
 		oldMatrix = new float[dimension + 2][dimension + 2];
 		newMatrix = new float[dimension + 2][dimension + 2];
 
 		initializeMatrix();
 	}
 
-	/**
-	 * Initializes the plate's edge node values with edge temperatures.
-	 * Zeroes out interior nodes.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see common.PlateInterface#initializeMatrix()
 	 */
+	@Override
 	public void initializeMatrix() {
 		for (int row = 0; row < dimension + 2; row++) {
 			for (int col = 0; col < dimension + 2; col++) {
