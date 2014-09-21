@@ -1,4 +1,4 @@
-// Plate.java
+// Plate.java for Float java program 
 package Twfahp;
 
 import common.*;
@@ -57,15 +57,15 @@ public class Plate implements PlateInterface {
 			}
 		}
 	}
-
+	//sets the given double value
 	public void setTempThreshold(double threshold) {
 		this.tempThreshold = threshold;
 	}
-
+	//sets the given int value
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
-
+	//sets the given value
 	public void setDiffusionListener(DiffusionListener dl) {
 		this.dl = dl;
 	}
@@ -94,7 +94,7 @@ public class Plate implements PlateInterface {
 		}
 		dl.diffusionDone(iterations);
 	}
-
+		//Code to return matrix values
 	public double[][] getMatrix() {
 		// Convert matrix (after computations) to adhere to interface
 		return convertMatrix(newmatrix);
